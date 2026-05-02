@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "tradingview": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "bin/tradingview-mcp"]
+    }
+  }
+}

@@ -1,0 +1,115 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Launch TradingView Desktop (macOS) with Chrome DevTools Protocol enabled.
+# The TradingView MCP server connects to CDP on the chosen port to read
+# live chart state.
+#
+#   bin/launch_tv          # default port 9222
+#   bin/launch_tv 9333     # custom port
+
+require 'net/http'
+require 'uri'
+require 'json'
+
+DEFAULT_PORT        = 9222
+CDP_TIMEOUT_SECONDS = 15
+CDP_POLL_INTERVAL   = 1
+
+KNOWN_APP_PATHS = [
+  '/Applications/TradingView.app/Contents/MacOS/TradingView',
+  File.expand_path('~/Applications/TradingView.app/Contents/MacOS/TradingView')
+].freeze
+
+def find_tradingview
+  KNOWN_APP_PATHS.find { |path| File.exist?(path) } ||
+    spotlight_bundle_executable ||
+    find_first_tradingview_app
+end
+
+def spotlight_bundle_executable
+  app_dir = `mdfind "kMDItemCFBundleIdentifier == 'com.niceincontact.TradingView'" 2>/dev/null`.lines.first&.strip
+  app_executable_in(app_dir)
+end
+
+def find_first_tradingview_app
+  app_dir = `find /Applications #{Dir.home}/Applications -maxdepth 2 -name "TradingView.app" 2>/dev/null`.lines.first&.strip
+  app_executable_in(app_dir)
+end
+
+def app_executable_in(app_dir)
+  return nil if app_dir.nil? || app_dir.empty?
+
+  candidate = File.join(app_dir, 'Contents', 'MacOS', 'TradingView')
+  File.exist?(candidate) ? candidate : nil
+end
+
+def kill_existing_tradingview
+  system('pkill', '-f', 'TradingView', out: File::NULL, err: File::NULL)
+  sleep 1
+end
+
+def cdp_response_body(port)
+  uri = URI("http://localhost:#{port}/json/version")
+  response = Net::HTTP.start(uri.host, uri.port, open_timeout: 1, read_timeout: 1) do |http|
+    http.get(uri.request_uri)
+  end
+  response.is_a?(Net::HTTPSuccess) ? response.body : nil
+rescue Errno::ECONNREFUSED, Net::OpenTimeout, Net::ReadTimeout, EOFError
+  nil
+end
+
+def wait_for_cdp(port, timeout:)
+  print 'Waiting for CDP'
+  (timeout / CDP_POLL_INTERVAL).times do
+    body = cdp_response_body(port)
+    if body
+      puts
+      puts "CDP ready at http://localhost:#{port}"
+      print_version_payload(body)
+      return true
+    end
+    print '.'
+    sleep CDP_POLL_INTERVAL
+  end
+  puts
+  false
+end
+
+def print_version_payload(body)
+  puts JSON.pretty_generate(JSON.parse(body))
+rescue JSON::ParserError
+  puts body
+end
+
+def report_missing_app(port)
+  warn 'Error: TradingView Desktop not found.'
+  warn "Checked: #{KNOWN_APP_PATHS.join(', ')}"
+  warn ''
+  warn 'Install from https://www.tradingview.com/desktop/ or launch manually:'
+  warn "  /path/to/TradingView.app/Contents/MacOS/TradingView --remote-debugging-port=#{port}"
+end
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+
+port = (ARGV[0] || DEFAULT_PORT).to_i
+app  = find_tradingview
+
+if app.nil?
+  report_missing_app(port)
+  exit 1
+end
+
+puts "Found TradingView at: #{app}"
+kill_existing_tradingview
+
+puts "Launching with --remote-debugging-port=#{port} ..."
+pid = Process.spawn(app, "--remote-debugging-port=#{port}", out: File::NULL, err: File::NULL)
+Process.detach(pid)
+puts "PID: #{pid}"
+
+unless wait_for_cdp(port, timeout: CDP_TIMEOUT_SECONDS)
+  warn "Warning: CDP not responding after #{CDP_TIMEOUT_SECONDS}s. TradingView may still be loading."
+  warn "Check manually: curl http://localhost:#{port}/json/version"
+  exit 1
+end

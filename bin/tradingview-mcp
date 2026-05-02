@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Entry point for the TradingView MCP server (Ruby implementation).
+# Configured in .mcp.json — Claude Code spawns this on stdio when the
+# project loads, then talks JSON-RPC to it.
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'bundler/setup'
+require 'mcp/tradingview'
+
+MCP::TradingView.run!

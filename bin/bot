@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/trading_bot'
+
+if ARGV.include?('--tax-summary')
+  TradingBot::TradeLogger.new.print_tax_summary
+  exit
+end
+
+once = ARGV.include?('--once')
+
+config = TradingBot::Config.from_env
+
+trap('INT') do
+  puts "\n👋 Stopping bot loop."
+  exit 0
+end
+
+loop do
+  TradingBot::Pipeline.new(config: config).call
+
+  break if once
+
+  interval = config.refresh_seconds
+  if interval.nil?
+    warn "Cannot derive loop interval from timeframe #{config.timeframe.inspect} — exiting after one run."
+    break
+  end
+
+  next_run = Time.now + interval
+  puts "\n⏳ Next run in #{interval}s (≈ #{next_run.strftime('%H:%M:%S')}). Ctrl-C to stop."
+  sleep interval
+end
