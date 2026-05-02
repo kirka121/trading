@@ -7,14 +7,26 @@
 #
 #   bin/launch_tv          # default port 9222
 #   bin/launch_tv 9333     # custom port
+#
+# Behavior when TV is already running:
+#   1. If CDP is already responsive on the requested port, REUSE the running
+#      instance — no kill, no relaunch. This is what /chart needs on
+#      back-to-back invocations.
+#   2. Otherwise (TV running but CDP wrong port / not enabled), shut it down
+#      gracefully (osascript quit → SIGTERM → SIGKILL escalation), wait for
+#      the process to fully exit AND for the CDP port to actually free,
+#      then launch a fresh instance.
 
 require 'net/http'
 require 'uri'
 require 'json'
 
-DEFAULT_PORT        = 9222
-CDP_TIMEOUT_SECONDS = 15
-CDP_POLL_INTERVAL   = 1
+DEFAULT_PORT             = 9222
+CDP_TIMEOUT_SECONDS      = 45    # cold start of TV Desktop can be slow
+CDP_POLL_INTERVAL        = 1
+GRACEFUL_QUIT_TIMEOUT    = 20    # how long the OS-level "quit" should be given
+SIGTERM_TIMEOUT          = 5     # follow-up SIGTERM grace
+PORT_FREE_TIMEOUT        = 10    # Electron may take a moment to release the port
 
 KNOWN_APP_PATHS = [
   '/Applications/TradingView.app/Contents/MacOS/TradingView',
@@ -44,9 +56,78 @@ def app_executable_in(app_dir)
   File.exist?(candidate) ? candidate : nil
 end
 
-def kill_existing_tradingview
+# pgrep returns the renderer + helper subprocesses too. We only care that
+# *some* TradingView process is alive — any non-empty list means "still up".
+def tradingview_pids
+  pids = `pgrep -f TradingView 2>/dev/null`.split.map(&:to_i).reject(&:zero?)
+  # Exclude this script itself (matches by name when shebang is `ruby`).
+  pids.reject { |pid| pid == Process.pid }
+end
+
+def tradingview_running?
+  !tradingview_pids.empty?
+end
+
+# Polls until the predicate returns truthy or the deadline elapses.
+def wait_until(timeout:, interval: 0.5)
+  deadline = monotonic_now + timeout
+  loop do
+    return true if yield
+    return false if monotonic_now > deadline
+
+    sleep interval
+  end
+end
+
+def monotonic_now
+  Process.clock_gettime(Process::CLOCK_MONOTONIC)
+end
+
+# Sends an Apple Events "quit" — the same thing Cmd+Q dispatches. Electron
+# apps tear down their windows and release locks/ports cleanly when given
+# a chance to handle it.
+def graceful_quit_macos
+  system('osascript', '-e', 'tell application "TradingView" to quit',
+         out: File::NULL, err: File::NULL)
+end
+
+def shut_down_tradingview
+  return unless tradingview_running?
+
+  puts 'TradingView already running — asking it to quit gracefully…'
+  graceful_quit_macos
+
+  return if wait_until(timeout: GRACEFUL_QUIT_TIMEOUT) { !tradingview_running? }
+
+  puts "Still alive after #{GRACEFUL_QUIT_TIMEOUT}s — sending SIGTERM…"
   system('pkill', '-f', 'TradingView', out: File::NULL, err: File::NULL)
-  sleep 1
+
+  return if wait_until(timeout: SIGTERM_TIMEOUT) { !tradingview_running? }
+
+  warn 'SIGTERM ignored — escalating to SIGKILL.'
+  system('pkill', '-9', '-f', 'TradingView', out: File::NULL, err: File::NULL)
+  wait_until(timeout: 3) { !tradingview_running? }
+end
+
+# Confirm nothing is still listening on the CDP port. Electron sometimes
+# holds the socket for a beat after the process exits — if we race ahead
+# and spawn a new instance, the new one binds to a different ephemeral port
+# (or worse, fails silently) and we end up with a zombie white window.
+def port_listening?(port)
+  system('lsof', '-i', ":#{port}", '-sTCP:LISTEN',
+         out: File::NULL, err: File::NULL)
+end
+
+def wait_for_port_free(port)
+  return true unless port_listening?(port)
+
+  print "Waiting for port #{port} to free up"
+  ok = wait_until(timeout: PORT_FREE_TIMEOUT, interval: 0.5) do
+    print '.'
+    !port_listening?(port)
+  end
+  puts
+  ok
 end
 
 def cdp_response_body(port)
@@ -93,17 +174,30 @@ end
 # ─── Main ────────────────────────────────────────────────────────────────────
 
 port = (ARGV[0] || DEFAULT_PORT).to_i
-app  = find_tradingview
 
+# Fast path: TradingView is already up AND the debugger is responsive on
+# the requested port. Reuse it — no need to disturb the user's open charts.
+if cdp_response_body(port)
+  puts "TradingView CDP already responsive at http://localhost:#{port} — reusing existing instance."
+  print_version_payload(cdp_response_body(port))
+  exit 0
+end
+
+app = find_tradingview
 if app.nil?
   report_missing_app(port)
   exit 1
 end
-
 puts "Found TradingView at: #{app}"
-kill_existing_tradingview
 
-puts "Launching with --remote-debugging-port=#{port} ..."
+shut_down_tradingview
+
+unless wait_for_port_free(port)
+  warn "Port #{port} still in use after #{PORT_FREE_TIMEOUT}s. Refusing to launch — another process likely owns it."
+  exit 1
+end
+
+puts "Launching with --remote-debugging-port=#{port} …"
 pid = Process.spawn(app, "--remote-debugging-port=#{port}", out: File::NULL, err: File::NULL)
 Process.detach(pid)
 puts "PID: #{pid}"

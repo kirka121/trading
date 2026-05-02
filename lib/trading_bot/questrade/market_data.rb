@@ -40,6 +40,14 @@ module TradingBot
 
         data = @client.get(path)
         (data['candles'] || []).map { |c| build_candle(c) }
+      rescue Client::ApiError => e
+        # Questrade error code 1019 ("Symbol not found") on the candles
+        # endpoint shows up even when the symbol search succeeded — usually
+        # a delisted / migrated ticker that's still indexed. Surface as
+        # SymbolNotFound so callers' existing rescue path handles it.
+        raise SymbolNotFound, "Candles unavailable for #{ticker} (#{e.message[0, 120]})" if e.message.include?('Symbol not found')
+
+        raise
       end
 
       private

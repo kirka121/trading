@@ -1,13 +1,5 @@
 # Strategy Extraction Prompt
 
-Use this after scraping YouTube transcripts with Apify.
-Paste the transcript content below, then run this prompt in Claude Code.
-
----
-
-I have pasted the transcripts from one or more traders below.
-
-Read through all of the content and extract their trading strategy in structured form.
 Answer these questions precisely — do not invent details that aren't in the transcripts:
 
 1. **What indicators do they use?**
