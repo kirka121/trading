@@ -1,14 +1,26 @@
 {
-  "watchlist": ["SPY", "VOO", "VSP", "QQQI", "AAPL", "SHOP", "EMBJ", "AMZN", "DDOG", "ATZAF"],
+  "watchlist": [
+    { "questrade": "SPY",    "tv": "SPY" },
+    { "questrade": "VOO",    "tv": "VOO" },
+    { "questrade": "VSP.TO", "tv": "VSP" },
+    { "questrade": "QQQI",   "tv": "QQQI" },
+    { "questrade": "SHOP",   "tv": "SHOP" },
+    { "questrade": "EMBJ",   "tv": "EMBJ" },
+    { "questrade": "AMZN",   "tv": "AMZN" },
+    { "questrade": "DDOG",   "tv": "DDOG" },
+    { "questrade": "ATZAF",  "tv": "ATZAF" },
+    { "questrade": "PRYMY",  "tv": "PRYMY" },
+    { "questrade": "CASY",   "tv": "CASY" }
+  ],
   "max_tradeview_indicators": 2,
-  "active_strategy": "vwap_rsi_ema",
+  "active_strategy": "all",
 
   "strategies": {
     "vwap_rsi_ema": {
       "name": "VWAP + RSI(3) + EMA(8) Intraday Stock Strategy",
       "sources": ["Adapted from Lewis Jackson"],
       "description": "Three indicators, each doing a different job. EMA(8) for trend direction, VWAP for session bias, RSI(3) for entry timing. All three must align before a trade fires. Designed for liquid US ETFs and large-caps on intraday timeframes.",
-
+      "applicable_symbols": ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "NFLX", "COIN", "AVGO"],
       "default_timeframe": "5m",
 
       "indicators": {
@@ -50,6 +62,298 @@
       ],
 
       "notes": "Intraday strategy — designed for 5m to 15m timeframes on liquid US equities/ETFs (SPY, QQQ, AAPL, MSFT). RSI(3) is intentionally fast and sensitive. Do not apply to higher timeframes without re-tuning."
+    },
+
+    "gap_and_go_cameron": {
+      "name": "Gap & Go (Ross Cameron / Warrior Trading) — Scanner",
+      "sources": ["Ross Cameron — Warrior Trading"],
+      "description": "Long-only momentum scanner — runs once per trading day on a curated universe of historically gap-prone names (small/mid-cap momentum, biotech, EV, crypto-adjacent, recent IPOs). For each symbol, the bot computes the overnight gap %, relative volume, and VWAP/EMA(9) hold; it ranks symbols by gap × relative-volume and surfaces the top 20 that pass the entry rules. Pre-market-high break and <20M-share float (Cameron's hand-traded filters) are noted but NOT gated — the bot can't see those from daily Questrade candles, so the scanner produces a candidate list rather than auto-trades.",
+      "applicable_symbols": [
+        "NVDA", "AMD", "TSLA", "AAPL", "MSFT", "AMZN", "GOOGL", "META", "NFLX", "AVGO",
+        "COIN", "ADBE", "CRM", "ORCL", "SHOP", "PLTR", "ARM", "RDDT", "SOFI", "HOOD",
+        "AFRM", "UPST", "RIVN", "LCID", "MSTR", "MARA", "RIOT", "HUT", "CLSK", "BITF",
+        "IREN", "GME", "AMC", "BB", "KOSS", "NIO", "NKLA", "PLUG", "FCEL", "BLDP",
+        "BLNK", "CHPT", "AI", "SOUN", "BBAI", "RUM", "NET", "MDB", "SNOW", "DDOG",
+        "FTNT", "MRNA", "BNTX", "NVAX", "OCGN", "IOVA", "CYTK", "GERN", "TLRY", "CGC",
+        "CRON", "ACB", "DKNG", "ANF", "ELF", "CHWY", "BABA", "JD", "JPM", "GS",
+        "BAC", "WFC", "CVNA", "VRT", "ROKU", "RBLX", "GTLB", "OKTA", "U", "SPOT"
+      ],
+      "default_timeframe": "1D",
+
+      "indicators": {
+        "premarket_gap_pct": "Move from prior close to 9:29 ET price, expressed as a percent. Setup requires ≥4%.",
+        "relative_volume": "Today's cumulative volume divided by the 50-day average at the same time of day. Setup requires ≥5×.",
+        "ema_9": "Fast trend reference on 1m/5m. Pullbacks should hold above the 9 EMA.",
+        "vwap": "Session anchor. Healthy gappers stay above VWAP after the open; a VWAP loss kills the trade.",
+        "float": "Tradable shares. Cameron prefers <20M float for the cleanest momentum."
+      },
+
+      "bias_criteria": {
+        "bullish": [
+          "Pre-market gap ≥ 4% on a real catalyst",
+          "Relative volume ≥ 5× by 9:30 ET",
+          "Float < 20M shares preferred (works up to 100M with stronger catalyst)"
+        ]
+      },
+
+      "entry_rules": {
+        "long": [
+          "First 1m or 5m candle after 9:30 ET breaks the pre-market high",
+          "Breakout candle prints volume ≥ 1× the 50-day average daily volume",
+          "Price is above VWAP and above the 9 EMA on the entry candle",
+          "Spread is < 0.2% of price (skip illiquid names)"
+        ]
+      },
+
+      "exit_rules": [
+        "Hard stop: low of the breakout candle (or 1% below entry, whichever is tighter)",
+        "Take profit at 2R (twice the dollar risk) — Cameron's standard winner size",
+        "Trail the 9 EMA on 1m chart once price is +1R; exit on a clean break and close below it",
+        "Cut at 11:00 ET regardless — momentum reliability falls off after the morning session"
+      ],
+
+      "risk_rules": [
+        "Risk ≤ 1% of account per trade; Cameron's PDT-account variant uses 0.5%",
+        "Maximum 3 trades per day — stop after two consecutive losers",
+        "Do not enter after 10:30 ET; the gap-and-go window is the first hour",
+        "Halt + resume bars: stand aside until the first post-halt 1m candle closes",
+        "Skip any stock with a pending earnings or FDA decision today"
+      ],
+
+      "notes": "Per-winner target ≥5% of position notional is realistic when entry stop is ~1–2% and target is 2R. Backtesting on intraday Russell 2000 small-cap gappers is the most representative dataset. Requires real-time scanner feed (gappers list); will not fire correctly on a static watchlist of large-caps."
+    },
+
+    "abcd_aziz": {
+      "name": "ABCD Pullback Continuation (Andrew Aziz)",
+      "sources": ["Andrew Aziz — Bear Bull Traders, 'How to Day Trade for a Living'"],
+      "description": "Trades the second leg of a momentum move. A→B is the initial vertical thrust, B→C is a measured pullback (typically 38–61% retrace), C→D is the continuation. Entry at C when the pullback shows reversal candles + volume drying up; exits at D = projected 1:2 R/R or first sign of failure.",
+      "applicable_symbols": ["NVDA", "AMD", "TSLA", "COIN", "AAPL", "MSFT", "AMZN", "META", "NFLX", "AVGO", "PLTR", "SHOP", "CRM", "ADBE", "MSTR", "MARA", "AFRM", "SNOW"],
+
+      "default_timeframe": "5m",
+
+      "indicators": {
+        "swing_high_a_to_b": "Identify the A→B move as a 5m candle range > 2× the 14-day ATR — i.e. an unusual thrust.",
+        "fib_retracement_b_to_c": "Pullback should land between 38% and 61% of A→B before reversing.",
+        "vwap": "The C-pivot must hold above VWAP for longs (below for shorts).",
+        "ema_20": "20-period on 5m chart — confluence with C is the highest-quality setup.",
+        "volume_drying_up": "Pullback bars (B→C) should print sub-average volume; continuation candle prints surge volume."
+      },
+
+      "bias_criteria": {
+        "bullish": [
+          "A→B is a sharp upward thrust on heavy volume",
+          "B→C pullback is orderly (no consecutive heavy red bars)",
+          "C-pivot holds above prior intraday support / VWAP / 20 EMA"
+        ],
+        "bearish": [
+          "A→B is a sharp downward thrust on heavy volume",
+          "B→C bounce is weak (low volume, narrow bars)",
+          "C-pivot rejects below prior intraday resistance / VWAP / 20 EMA"
+        ]
+      },
+
+      "entry_rules": {
+        "long": [
+          "Identify A (start) and B (top of thrust); thrust is >2× ATR(14)",
+          "Pullback retraces 38–61% of A→B and stalls at VWAP, 20 EMA, or prior breakout level",
+          "Reversal candle at C: bullish engulfing, hammer, or higher-low close",
+          "Enter on the next candle's break of the C-candle high",
+          "Volume on the entry candle exceeds the average of the prior 5 bars"
+        ],
+        "short": [
+          "A→B is a downward thrust >2× ATR(14)",
+          "B→C bounces 38–61% and stalls at VWAP, 20 EMA, or prior breakdown level",
+          "Reversal candle at C: bearish engulfing, shooting star, or lower-high close",
+          "Enter on the next candle's break of the C-candle low",
+          "Volume on entry exceeds the average of the prior 5 bars"
+        ]
+      },
+
+      "exit_rules": [
+        "Hard stop: just beyond C (a few cents past the pullback's extreme)",
+        "Target D: project the A→B distance from C — that's the 1:2+ measured move",
+        "Scale 50% at 1R; trail the rest with the 20 EMA on the entry timeframe",
+        "Time stop: exit if D not reached within 6× the A→B candle count"
+      ],
+
+      "risk_rules": [
+        "Risk ≤ 1% of account per trade",
+        "If the C-candle range is wider than 1% of price, position size shrinks to keep stop at 1% account risk",
+        "Skip if A→B move was overnight (pullback dynamics are different)",
+        "Skip if news is hitting the tape during the pullback — reverts to a different regime",
+        "Maximum 4 ABCDs per day — quality over quantity"
+      ],
+
+      "notes": "Aziz teaches this on the 1m or 5m. Per-winner expectancy of 5–8% on the position is achievable when the move is taken at 2R and ATR conditions hold. Avoid on FOMC / CPI release days — the regular ABCD geometry breaks down."
+    },
+
+    "bull_flag_qullamaggie": {
+      "name": "Stage-2 Bull Flag Breakout (Kristjan Kullamägi)",
+      "sources": ["Kristjan Kullamägi — @Qullamaggie on X / qullamaggie.com"],
+      "description": "Hold-time 3–15 days. Looks for stocks that have just made a sharp vertical move (>30% in 1–3 months) followed by a tight consolidation near the highs (a 'bull flag'). Enters on day-1 breakout above the consolidation high with volume; rides the second leg of the move. Wins target 20–40% of position; losers are exited cleanly at the consolidation low.",
+      "applicable_symbols": ["PLTR", "APP", "SOFI", "HOOD", "RDDT", "COIN", "MSTR", "MARA", "RIOT", "CRWD", "NET", "MDB", "SNOW", "DDOG", "FTNT", "ARM", "ANF", "ELF", "AFRM", "UPST", "NVDA", "AMD"],
+
+      "default_timeframe": "1D",
+
+      "indicators": {
+        "ema_10_d": "10-day EMA — primary trail for the trend.",
+        "ema_20_d": "20-day EMA — secondary trail; deeper pullbacks are still valid above 20 EMA.",
+        "ma_50_d": "50-day SMA — the stock must be above this for stage-2 status.",
+        "ma_200_d": "200-day SMA — must be rising; price above it.",
+        "adr_pct": "Average Daily Range over 20 days, in percent. Kristjan prefers ADR ≥ 5% for the asymmetry he wants.",
+        "relative_volume": "Breakout day must show volume ≥ 1.5× the 50-day average.",
+        "prior_move": "Must have a recent vertical move ≥ 30% within the last 1–3 months."
+      },
+
+      "bias_criteria": {
+        "bullish": [
+          "Stock has rallied 30%+ within 1–3 months prior to the consolidation",
+          "Price is above the rising 10/20 EMAs and the 50 SMA",
+          "200 SMA is rising and price is above it",
+          "Consolidation is 3–10 bars tight (high-low range < 50% of the prior move's leg)"
+        ]
+      },
+
+      "entry_rules": {
+        "long": [
+          "Day-1 breakout: price closes above the consolidation high",
+          "Breakout day's volume ≥ 1.5× the 50-day average",
+          "Stock's ADR is ≥ 5% — provides headroom for the second leg",
+          "Optional intraday entry: 5m or 1H break of the consolidation high with volume"
+        ]
+      },
+
+      "exit_rules": [
+        "Hard stop: low of the consolidation (or low of the breakout day, whichever is tighter)",
+        "Sell 1/3 to 1/2 into strength after 3–5 days, when the move shows extension",
+        "Trail the rest with the 10 EMA on daily — exit on a daily close below it",
+        "Hard time-stop: exit any remainder after 15 trading days; second-leg moves rarely persist beyond that"
+      ],
+
+      "risk_rules": [
+        "Risk ≤ 0.25–0.5% of account per trade — Kristjan keeps risk small relative to many small-cap traders",
+        "Position size derived from stop distance, not a flat dollar amount",
+        "Skip if the broader market (SPY/QQQ) is in a clear stage-4 downtrend",
+        "Skip if breakout closes weakly (lower 1/3 of the day's range)",
+        "Avoid earnings within the next 5 trading days — gap risk vs. expected reward is asymmetric"
+      ],
+
+      "notes": "Kristjan publishes his portfolio drawdowns and wins on his website. Median winner historically is 20–30% over 3–10 days when the setup fires cleanly, comfortably clearing the 5% target. The strategy LIVES on the small/mid-cap growth complex; running it on SPY/VOO will produce mostly false signals."
+    },
+
+    "avwap_reclaim_shannon": {
+      "name": "Anchored VWAP Reclaim (Brian Shannon)",
+      "sources": ["Brian Shannon — AlphaTrends, 'Maximum Trading Gains with Anchored VWAP'"],
+      "description": "Hold-time 1–10 days. Anchors a VWAP to a meaningful event (earnings gap, all-time high, swing low, IPO, merger). Trades the moment price RECLAIMS that AVWAP after spending time below it — buyers have absorbed all sellers from the anchor day, momentum flips. Stops are tight (just below the reclaim); targets are the next higher AVWAP, prior swing high, or a measured-move extension.",
+      "applicable_symbols": ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "NFLX", "AMD", "CRM", "ADBE", "AVGO", "COIN", "ORCL", "NOW", "JPM", "GS", "BA"],
+
+      "default_timeframe": "1H",
+
+      "indicators": {
+        "anchored_vwap_event": "Anchor to: most recent earnings, all-time high, gap day, or material news day. The anchor IS the level that matters.",
+        "anchored_vwap_swing_low": "Second AVWAP from the most recent significant swing low — confluence with the event AVWAP marks high-conviction zones.",
+        "volume": "Reclaim must happen on volume — average or higher. Low-volume reclaims fail more often.",
+        "ema_20_h": "20-period EMA on the entry timeframe — secondary confirmation that the trend has flipped.",
+        "atr_14": "For position sizing only — stop distance derived from ATR multiples below the AVWAP."
+      },
+
+      "bias_criteria": {
+        "bullish": [
+          "Price was below the event-AVWAP for ≥ 5 trading days",
+          "Price closes above the event-AVWAP on the entry timeframe",
+          "Reclaim candle volume ≥ 20-period average volume",
+          "20 EMA on entry timeframe begins to flatten or curl up"
+        ],
+        "bearish": [
+          "Price was above the event-AVWAP for ≥ 5 trading days",
+          "Price closes below the event-AVWAP on the entry timeframe with volume",
+          "20 EMA on entry timeframe begins to flatten or curl down"
+        ]
+      },
+
+      "entry_rules": {
+        "long": [
+          "Identify the most relevant anchor (earnings, ATH, gap, swing low)",
+          "Wait for price to close above the AVWAP on the entry timeframe (1H or 4H)",
+          "Confirm volume on the reclaim bar is ≥ the 20-bar average",
+          "Enter at the close of the reclaim bar; alt entry on the first pullback that holds AVWAP"
+        ],
+        "short": [
+          "Mirror image: AVWAP loss with volume after sustained holding above it",
+          "Enter on close below AVWAP; alt entry on first lower-high that fails AVWAP"
+        ]
+      },
+
+      "exit_rules": [
+        "Hard stop: 1× ATR(14) below AVWAP for longs (above for shorts)",
+        "Target 1: prior swing high / next overhead AVWAP — book 1/2 here",
+        "Target 2: measured move = distance from anchor low to anchor — book remainder",
+        "Move stop to breakeven once price is +1R away",
+        "Exit fully if AVWAP is lost on a closing-bar basis after entry"
+      ],
+
+      "risk_rules": [
+        "Risk ≤ 1% of account per trade",
+        "Two AVWAPs (event + swing-low) at the same level = high-conviction; one alone = standard size",
+        "Skip if next earnings is within 3 trading days",
+        "Avoid if SPY is also losing its own AVWAP from a recent all-time high — broad-tape correlation kills idiosyncratic setups"
+      ],
+
+      "notes": "Per-trade winners typically run 5–15% of position notional when the anchor is well-chosen and the move has room. Brian's central thesis: AVWAP reflects the average price PAID by everyone trading since the anchor — a reclaim flips them all from underwater to in profit, removing supply pressure. Manual anchor selection means this strategy resists naive automation; the bot would need a heuristic for picking the right anchor (latest earnings is the simplest)."
+    },
+
+    "vcp_breakout_minervini": {
+      "name": "VCP — Volatility Contraction Pattern Breakout (Mark Minervini)",
+      "sources": ["Mark Minervini — SEPA, 'Trade Like a Stock Market Wizard'"],
+      "description": "Hold-time 1–14 days for the breakout phase (longer holds become full position trades). Identifies stocks consolidating in 2–4 successive volatility contractions — each pullback shallower than the last, each on lighter volume. Enters on the pivot breakout out of the tightest contraction with a volume surge; cuts losses at 7–8% (Minervini's hard rule); rides winners into clear strength.",
+      "applicable_symbols": ["NVDA", "AAPL", "MSFT", "GOOG", "META", "AVGO", "AMD", "CRM", "ORCL", "ADBE", "NOW", "PLTR", "NFLX", "TSLA", "COST", "LLY", "V", "MA", "ANET", "CRWD", "TSM", "ASML", "SHOP", "AXP", "NVO"],
+
+      "default_timeframe": "1D",
+
+      "indicators": {
+        "vcp_contractions": "2–4 successive pullbacks within a base, each smaller than the previous. T1: 25–35%, T2: 15–20%, T3: 8–12%, T4 (optional): 5%. Volume contracts in parallel.",
+        "ma_50_d": "50-day SMA — must be rising; price must be above it.",
+        "ma_150_d": "150-day SMA — must be above the 200-day; price above the 150.",
+        "ma_200_d": "200-day SMA — must be rising for ≥ 1 month.",
+        "relative_strength_rating": "IBD-style RS rating ≥ 70 (top 30% of the market) at minimum, ≥ 80 preferred.",
+        "pivot_volume": "Breakout day's volume ≥ 1.4–2× the 50-day average."
+      },
+
+      "bias_criteria": {
+        "bullish": [
+          "Stage 2 uptrend: price above rising 50/150/200 SMAs",
+          "Price within 25% of its 52-week high",
+          "Relative strength rating ≥ 70 (preferred ≥ 80)",
+          "Base shows 2–4 successive volatility contractions"
+        ]
+      },
+
+      "entry_rules": {
+        "long": [
+          "Pivot point: the high of the final, tightest contraction",
+          "Buy the breakout above the pivot on intraday strength (don't wait for close on first try)",
+          "Breakout volume ≥ 1.4× the 50-day average daily volume",
+          "Tight pivot range: high-low of the final contraction < 5% of price",
+          "Optional confirmation: relative strength line breaks to a new high alongside the pivot break"
+        ]
+      },
+
+      "exit_rules": [
+        "Hard stop: 7–8% below entry (Minervini's universal rule), or below the pivot — whichever is tighter",
+        "Sell 1/3 to 1/2 into the first 15–25% strength move (typically days 5–10)",
+        "Trail the rest with the 20-day EMA on daily — exit on a closing break",
+        "Cut immediately if the breakout fails (price closes back inside the base)"
+      ],
+
+      "risk_rules": [
+        "Position size such that stop = 1.25–2% of account — Minervini's 'progressive exposure'",
+        "Pyramid only into trades already +5% in your favor",
+        "Avoid earnings within the next 10 trading days (gap-down risk dwarfs the upside)",
+        "Avoid breakouts in a market downtrend (use SPY 200 SMA as the regime filter)",
+        "Maximum 5 open positions at a time during the early phase of a bull cycle"
+      ],
+
+      "notes": "Minervini's documented track record averaged ~30% per winning swing during favorable cycles; per-trade winner targets of 15–25% over 1–3 weeks are typical. The 7–8% maximum loss rule is the keystone — without it the strategy degrades into 'buy and hope'. RS rating, base count, and contraction quality require fundamental + chart-pattern discipline that no out-of-the-box indicator captures perfectly; this is a discretionary strategy first, mechanical second."
     }
   }
 }

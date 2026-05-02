@@ -1,5 +1,6 @@
 .env
 *.log
 safety-check-log.json
+.bot-schedule.json
 .bundle/
 vendor/bundle/

@@ -1,34 +1,154 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Usage:
+#   bin/bot                                      # active strategies from rules.json
+#   bin/bot --once                               # one tick of each due strategy, then exit
+#   bin/bot --strategies vwap_rsi_ema            # ad-hoc override: only this strategy
+#   bin/bot --strategies vwap_rsi_ema,abcd_aziz  # …or a comma-separated subset
+#   bin/bot --once --strategies abcd_aziz        # combine flags freely
+#   bin/bot --reset-schedule                     # clear persisted timings, fire everything now
+#
+# `--strategies` (alias `--strategy`) overrides rules.json's `active_strategy`
+# for this invocation only — useful for testing one strategy in isolation.
+#
+# Schedule persistence: each strategy's last fire time is saved to
+# `.bot-schedule.json` so re-running the bot doesn't re-fire strategies that
+# already ran inside their refresh window. A 1D strategy that fired this
+# morning will sit idle for 23h59m even across multiple bot restarts. Use
+# `--reset-schedule` to force a full re-run.
+
+require 'json'
+require 'time'
 require_relative '../lib/trading_bot'
 
-if ARGV.include?('--tax-summary')
-  TradingBot::TradeLogger.new.print_tax_summary
-  exit
+SCHEDULE_FILE = '.bot-schedule.json'
+
+once  = ARGV.include?('--once')
+reset = ARGV.include?('--reset-schedule')
+
+# Parse `--strategies <comma-list>` (alias `--strategy`). Returns an Array
+# of keys, or nil when the flag is absent.
+def parse_strategy_filter(argv)
+  flag = ['--strategies', '--strategy'].find { |f| argv.include?(f) }
+  return nil unless flag
+
+  value = argv[argv.index(flag) + 1]
+  if value.nil? || value.start_with?('-')
+    warn "#{flag} requires a value (comma-separated strategy keys)"
+    exit 1
+  end
+
+  value.split(',').map(&:strip).reject(&:empty?)
 end
 
-once = ARGV.include?('--once')
+strategy_filter = parse_strategy_filter(ARGV)
 
-config = TradingBot::Config.from_env
+# Validate the filter eagerly so the user gets a clear error instead of a
+# stack trace 30 seconds into the loop.
+begin
+  initial = TradingBot::Config.from_env(strategy_keys: strategy_filter)
+rescue ArgumentError => e
+  warn "Config error: #{e.message}"
+  exit 1
+end
 
 trap('INT') do
   puts "\n👋 Stopping bot loop."
   exit 0
 end
 
+# ── Schedule persistence ─────────────────────────────────────────────────
+
+# Reads .bot-schedule.json into a Hash<strategy_key, Time>. Anything missing
+# or malformed defaults to {} so the strategy fires immediately on next run.
+def load_persisted_schedule
+  return {} unless File.exist?(SCHEDULE_FILE)
+
+  raw = JSON.parse(File.read(SCHEDULE_FILE))
+  raw.transform_values { |iso| Time.iso8601(iso) }
+rescue StandardError => e
+  warn "Schedule file unreadable (#{e.class}: #{e.message[0, 80]}) — starting fresh."
+  {}
+end
+
+# Writes only what's currently scheduled. Atomic via tmp + rename so a crash
+# can't truncate the file mid-write.
+def persist_schedule(schedule)
+  payload = schedule.to_h { |entry| [entry[:key], entry[:next_run].utc.iso8601] }
+  tmp     = "#{SCHEDULE_FILE}.tmp"
+  File.write(tmp, JSON.pretty_generate(payload))
+  File.rename(tmp, SCHEDULE_FILE)
+rescue StandardError => e
+  warn "Schedule persist failed (#{e.class}: #{e.message[0, 80]}) — continuing."
+end
+
+if reset
+  File.delete(SCHEDULE_FILE) if File.exist?(SCHEDULE_FILE)
+  puts "🔄 Schedule reset — every strategy fires on this run."
+end
+
+# ── Build initial schedule ───────────────────────────────────────────────
+
+# Per-strategy scheduler. Each entry tracks when its strategy is next due to
+# fire (`next_run`). On startup, prefer the persisted next_run from disk
+# (so a 1D strategy that ran 1h ago will sit idle for ~23h on restart).
+# Strategies without a persisted entry default to Time.now, firing now.
+#
+# CRITICAL: Config must be rebuilt BEFORE EACH STRATEGY FIRES, not just once
+# per scheduler tick. Questrade refresh tokens are SINGLE-USE — Authenticator
+# rotates the new one into ENV after every successful auth. Multiple strategy
+# Pipelines in the same tick would each construct their own Client; if they
+# all read from a single Config snapshot, only the first one gets a valid
+# token and the rest crash with "auth token needs refresh". Rebuilding per
+# strategy is cheap (one rules.json read + ENV reads) and guarantees every
+# Pipeline receives the freshly-rotated token.
+persisted = load_persisted_schedule
+schedule = initial.strategies.map do |spec|
+  { key: spec.key, next_run: persisted[spec.key] || Time.now }
+end
+
+# ── Main loop ────────────────────────────────────────────────────────────
+
+summary = TradingBot::TickSummary.new
+
 loop do
-  TradingBot::Pipeline.new(config: config).call
+  tick_started = Time.now
+  any_fired    = false
+
+  schedule.each do |entry|
+    next unless Time.now >= entry[:next_run]
+
+    config = TradingBot::Config.from_env(strategy_keys: strategy_filter)
+    spec   = config.strategies.find { |s| s.key == entry[:key] }
+    next unless spec # strategy was removed from rules.json mid-run; skip silently.
+
+    TradingBot::Pipeline.new(config: config, strategy: spec).call
+    entry[:next_run] = Time.now + spec.refresh_seconds
+    persist_schedule(schedule)
+    any_fired = true
+  end
+
+  # After all due strategies in this tick have fired, summarize any
+  # finalized (non-blocked) decisions and cross-reference each one against
+  # what the OTHER active strategies most recently said about the same
+  # symbol. Reload the log fresh so we pick up everything written this
+  # tick, including the tail end.
+  if any_fired
+    fresh_log = TradingBot::TradeLogger.new(
+      csv_path: initial.csv_path,
+      json_path: initial.decision_log_path
+    ).load_decision_log
+    summary.render(decision_log: fresh_log, since: tick_started, strategies: initial.strategies)
+  end
 
   break if once
 
-  interval = config.refresh_seconds
-  if interval.nil?
-    warn "Cannot derive loop interval from timeframe #{config.timeframe.inspect} — exiting after one run."
-    break
+  next_run_at = schedule.map { |e| e[:next_run] }.min
+  sleep_for   = next_run_at - Time.now
+  if sleep_for.positive?
+    next_label = schedule.min_by { |e| e[:next_run] }[:key]
+    puts "\n⏳ Next: #{next_label} in #{sleep_for.to_i}s (≈ #{next_run_at.strftime('%H:%M:%S')}). Ctrl-C to stop."
+    sleep sleep_for
   end
-
-  next_run = Time.now + interval
-  puts "\n⏳ Next run in #{interval}s (≈ #{next_run.strftime('%H:%M:%S')}). Ctrl-C to stop."
-  sleep interval
 end

@@ -1,45 +1,131 @@
-Date,Time (UTC),Exchange,Symbol,Side,Quantity,Price,Total USD,Fee (est.),Net Amount,Order ID,Mode,Notes
-
-2026-05-01,19:48:44,Questrade,SPY,,,722.22,,,,BLOCKED,BLOCKED,"Failed: Market bias"
-2026-05-01,19:50:41,Questrade,SPY,,,722.14,,,,BLOCKED,BLOCKED,"Failed: Market bias"
-2026-05-01,20:04:26,Questrade,SPY,"","",721.97,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:04,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:15,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:25,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:36,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:47,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:15:57,Questrade,SPY,"","",720.75,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:16:08,Questrade,SPY,"","",720.59,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:16:19,Questrade,SPY,"","",720.59,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:16:29,Questrade,SPY,"","",720.59,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:16:40,Questrade,SPY,"","",720.59,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,20:16:50,Questrade,SPY,"","",720.59,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,23:33:27,Questrade,SPY,"","",720.20,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-01,23:49:27,Questrade,SPY,"","",720.06,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,23:57:56,Questrade,SPY,"","",720.05,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,23:57:57,Questrade,VOO,"","",662.24,"","","",BLOCKED,BLOCKED,Failed: Quantity ≥ 1
-2026-05-01,23:57:57,Questrade,QQQI,"","",54.55,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-01,23:57:57,Questrade,AAPL,"","",279.85,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,23:57:57,Questrade,SHOP,"","",127.67,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend)
-2026-05-01,23:57:58,Questrade,EMBJ,"","",62.61,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-01,23:57:58,Questrade,AMZN,"","",267.78,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-01,23:57:58,Questrade,DDOG,"","",141.11,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-01,23:57:58,Questrade,ATZAF,"","",107.80,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend); Price within 1.5% of VWAP (not overextended)
-2026-05-02,17:18:49,Questrade,SPY,"","",720.00,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,17:18:49,Questrade,VOO,"","",662.00,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,17:18:49,Questrade,QQQI,"","",54.65,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend)
-2026-05-02,17:18:49,Questrade,AAPL,"","",280.07,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-02,17:18:50,Questrade,SHOP,"","",127.64,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend)
-2026-05-02,17:18:50,Questrade,EMBJ,"","",62.61,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,17:18:50,Questrade,AMZN,"","",267.55,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,17:18:50,Questrade,DDOG,"","",141.11,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-02,17:18:51,Questrade,ATZAF,"","",107.80,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend); Price within 1.5% of VWAP (not overextended)
-2026-05-02,18:25:25,Questrade,SPY,"","",720.00,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,18:25:25,Questrade,VOO,"","",662.00,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,18:25:26,Questrade,QQQI,"","",54.65,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend)
-2026-05-02,18:25:26,Questrade,AAPL,"","",280.07,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-02,18:25:26,Questrade,SHOP,"","",127.64,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend)
-2026-05-02,18:25:27,Questrade,EMBJ,"","",62.61,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,18:25:27,Questrade,AMZN,"","",267.55,"","","",BLOCKED,BLOCKED,Failed: RSI(3) above 70 (reversal setup in downtrend)
-2026-05-02,18:25:27,Questrade,DDOG,"","",141.11,"","","",BLOCKED,BLOCKED,Failed: Market bias
-2026-05-02,18:25:27,Questrade,ATZAF,"","",107.80,"","","",BLOCKED,BLOCKED,Failed: RSI(3) below 30 (snap-back setup in uptrend); Price within 1.5% of VWAP (not overextended)
+2026-05-02,20:52:11,SPY,vwap_rsi_ema,5m,BLOCKED,"","",720.00,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:11,QQQ,vwap_rsi_ema,5m,BLOCKED,"","",673.55,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:11,IWM,vwap_rsi_ema,5m,BLOCKED,"","",278.88,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:12,DIA,vwap_rsi_ema,5m,BLOCKED,"","",494.49,"","","",Failed: Market bias
+2026-05-02,20:52:12,AAPL,vwap_rsi_ema,5m,BLOCKED,"","",280.07,"","","",Failed: Market bias
+2026-05-02,20:52:12,MSFT,vwap_rsi_ema,5m,BLOCKED,"","",413.24,"","","",Failed: Market bias
+2026-05-02,20:52:12,NVDA,vwap_rsi_ema,5m,BLOCKED,"","",198.12,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:13,AMZN,vwap_rsi_ema,5m,BLOCKED,"","",267.55,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:13,GOOGL,vwap_rsi_ema,5m,BLOCKED,"","",385.34,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:52:13,META,vwap_rsi_ema,5m,BLOCKED,"","",608.80,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:14,TSLA,vwap_rsi_ema,5m,BLOCKED,"","",391.34,"","","",Failed: Market bias
+2026-05-02,20:52:14,AMD,vwap_rsi_ema,5m,BLOCKED,"","",361.85,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:52:14,NFLX,vwap_rsi_ema,5m,BLOCKED,"","",91.95,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:15,COIN,vwap_rsi_ema,5m,BLOCKED,"","",193.50,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:52:15,AVGO,vwap_rsi_ema,5m,BLOCKED,"","",420.27,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:52:42,NVDA,abcd_aziz,5m,BLOCKED,"","",198.12,"","","",Failed: Market bias
+2026-05-02,20:52:42,AMD,abcd_aziz,5m,BLOCKED,"","",361.85,"","","",Failed: Market bias
+2026-05-02,20:52:43,TSLA,abcd_aziz,5m,BLOCKED,"","",391.34,"","","",Failed: Market bias
+2026-05-02,20:52:43,COIN,abcd_aziz,5m,BLOCKED,"","",193.50,"","","",Failed: Market bias
+2026-05-02,20:52:43,AAPL,abcd_aziz,5m,BLOCKED,"","",280.07,"","","",Failed: Market bias
+2026-05-02,20:52:43,MSFT,abcd_aziz,5m,BLOCKED,"","",413.24,"","","",Failed: Market bias
+2026-05-02,20:52:44,AMZN,abcd_aziz,5m,BLOCKED,"","",267.55,"","","",Failed: Market bias
+2026-05-02,20:52:44,META,abcd_aziz,5m,BLOCKED,"","",608.80,"","","",Failed: Market bias
+2026-05-02,20:52:44,NFLX,abcd_aziz,5m,BLOCKED,"","",91.95,"","","",Failed: Market bias
+2026-05-02,20:52:44,AVGO,abcd_aziz,5m,BLOCKED,"","",420.27,"","","",Failed: Market bias
+2026-05-02,20:52:45,PLTR,abcd_aziz,5m,BLOCKED,"","",144.41,"","","",Failed: Market bias
+2026-05-02,20:52:45,SHOP,abcd_aziz,5m,BLOCKED,"","",127.64,"","","",Failed: Market bias
+2026-05-02,20:52:45,CRM,abcd_aziz,5m,BLOCKED,"","",183.80,"","","",Failed: Market bias
+2026-05-02,20:52:45,ADBE,abcd_aziz,5m,BLOCKED,"","",251.00,"","","",Failed: Market bias
+2026-05-02,20:52:46,MSTR,abcd_aziz,5m,BLOCKED,"","",176.59,"","","",Failed: Market bias
+2026-05-02,20:52:46,MARA,abcd_aziz,5m,BLOCKED,"","",11.46,"","","",Failed: Market bias
+2026-05-02,20:52:46,AFRM,abcd_aziz,5m,BLOCKED,"","",67.30,"","","",Failed: Market bias
+2026-05-02,20:52:46,SNOW,abcd_aziz,5m,BLOCKED,"","",141.02,"","","",Failed: Market bias
+2026-05-02,20:52:47,PLTR,bull_flag_qullamaggie,1D,BLOCKED,"","",144.07,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:47,APP,bull_flag_qullamaggie,1D,BLOCKED,"","",460.00,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:47,SOFI,bull_flag_qullamaggie,1D,BLOCKED,"","",16.43,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Tight 7-bar consolidation (range ≤ 12.0%); ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:48,HOOD,bull_flag_qullamaggie,1D,BLOCKED,"","",73.66,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:48,RDDT,bull_flag_qullamaggie,1D,BLOCKED,"","",166.48,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high
+2026-05-02,20:52:48,COIN,bull_flag_qullamaggie,1D,BLOCKED,"","",191.25,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:49,MSTR,bull_flag_qullamaggie,1D,BLOCKED,"","",177.17,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:49,MARA,bull_flag_qullamaggie,1D,BLOCKED,"","",11.46,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:49,RIOT,bull_flag_qullamaggie,1D,BLOCKED,"","",18.50,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high
+2026-05-02,20:52:50,CRWD,bull_flag_qullamaggie,1D,BLOCKED,"","",455.64,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:50,NET,bull_flag_qullamaggie,1D,BLOCKED,"","",217.50,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:50,MDB,bull_flag_qullamaggie,1D,BLOCKED,"","",263.46,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:51,SNOW,bull_flag_qullamaggie,1D,BLOCKED,"","",141.00,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:51,DDOG,bull_flag_qullamaggie,1D,BLOCKED,"","",140.53,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:51,FTNT,bull_flag_qullamaggie,1D,BLOCKED,"","",86.29,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:51,ARM,bull_flag_qullamaggie,1D,BLOCKED,"","",211.18,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:52,ANF,bull_flag_qullamaggie,1D,BLOCKED,"","",84.54,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Tight 7-bar consolidation (range ≤ 12.0%); ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:52,ELF,bull_flag_qullamaggie,1D,BLOCKED,"","",60.49,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high
+2026-05-02,20:52:52,AFRM,bull_flag_qullamaggie,1D,BLOCKED,"","",67.54,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:53,UPST,bull_flag_qullamaggie,1D,BLOCKED,"","",32.74,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Prior 60-bar move ≥ 30.0%; Tight 7-bar consolidation (range ≤ 12.0%); Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:53,NVDA,bull_flag_qullamaggie,1D,BLOCKED,"","",198.45,"","","",Failed: ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:54,AMD,bull_flag_qullamaggie,1D,BLOCKED,"","",360.54,"","","",Failed: Tight 7-bar consolidation (range ≤ 12.0%); ADR(20) ≥ 5.0%; Today closes above consolidation high; Breakout volume ≥ 1.5× avg
+2026-05-02,20:52:54,AAPL,avwap_reclaim_shannon,1H,BLOCKED,"","",280.07,"","","",Failed: Market bias
+2026-05-02,20:52:55,MSFT,avwap_reclaim_shannon,1H,BLOCKED,"","",413.24,"","","",Failed: Market bias
+2026-05-02,20:52:56,NVDA,avwap_reclaim_shannon,1H,BLOCKED,"","",198.12,"","","",Failed: Market bias
+2026-05-02,20:52:57,AMZN,avwap_reclaim_shannon,1H,BLOCKED,"","",267.55,"","","",Failed: Market bias
+2026-05-02,20:52:57,GOOGL,avwap_reclaim_shannon,1H,BLOCKED,"","",385.34,"","","",Failed: Market bias
+2026-05-02,20:52:58,META,avwap_reclaim_shannon,1H,BLOCKED,"","",608.80,"","","",Failed: Market bias
+2026-05-02,20:52:59,TSLA,avwap_reclaim_shannon,1H,BLOCKED,"","",391.34,"","","",Failed: Market bias
+2026-05-02,20:52:59,NFLX,avwap_reclaim_shannon,1H,BLOCKED,"","",91.95,"","","",Failed: Market bias
+2026-05-02,20:53:00,AMD,avwap_reclaim_shannon,1H,BLOCKED,"","",361.85,"","","",Failed: Price was below AVWAP for ≥ 5 bars; Reclaim volume ≥ 1.0× avg
+2026-05-02,20:53:01,CRM,avwap_reclaim_shannon,1H,BLOCKED,"","",183.80,"","","",Failed: Market bias
+2026-05-02,20:53:01,ADBE,avwap_reclaim_shannon,1H,BLOCKED,"","",251.00,"","","",Failed: Market bias
+2026-05-02,20:53:02,AVGO,avwap_reclaim_shannon,1H,BLOCKED,"","",420.27,"","","",Failed: Market bias
+2026-05-02,20:53:03,COIN,avwap_reclaim_shannon,1H,BLOCKED,"","",193.50,"","","",Failed: Market bias
+2026-05-02,20:53:04,ORCL,avwap_reclaim_shannon,1H,BLOCKED,"","",171.60,"","","",Failed: Market bias
+2026-05-02,20:53:04,NOW,avwap_reclaim_shannon,1H,BLOCKED,"","",90.98,"","","",Failed: Market bias
+2026-05-02,20:53:05,JPM,avwap_reclaim_shannon,1H,BLOCKED,"","",311.55,"","","",Failed: Market bias
+2026-05-02,20:53:05,GS,avwap_reclaim_shannon,1H,BLOCKED,"","",922.03,"","","",Failed: Market bias
+2026-05-02,20:53:06,BA,avwap_reclaim_shannon,1H,BLOCKED,"","",226.70,"","","",Failed: Market bias
+2026-05-02,20:53:07,NVDA,vcp_breakout_minervini,1D,BLOCKED,"","",198.45,"","","",Failed: RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:07,AAPL,vcp_breakout_minervini,1D,BLOCKED,"","",280.14,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:07,MSFT,vcp_breakout_minervini,1D,BLOCKED,"","",414.44,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:07,GOOG,vcp_breakout_minervini,1D,BLOCKED,"","",383.22,"","","",Failed: Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:08,META,vcp_breakout_minervini,1D,BLOCKED,"","",608.74,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:08,AVGO,vcp_breakout_minervini,1D,BLOCKED,"","",421.28,"","","",Failed: Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:08,AMD,vcp_breakout_minervini,1D,BLOCKED,"","",360.54,"","","",Failed: Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:09,CRM,vcp_breakout_minervini,1D,BLOCKED,"","",183.82,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:09,ORCL,vcp_breakout_minervini,1D,BLOCKED,"","",171.83,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:10,ADBE,vcp_breakout_minervini,1D,BLOCKED,"","",250.71,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:10,NOW,vcp_breakout_minervini,1D,BLOCKED,"","",91.16,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:10,PLTR,vcp_breakout_minervini,1D,BLOCKED,"","",144.07,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:11,NFLX,vcp_breakout_minervini,1D,BLOCKED,"","",92.06,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:11,TSLA,vcp_breakout_minervini,1D,BLOCKED,"","",390.82,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:11,COST,vcp_breakout_minervini,1D,BLOCKED,"","",1011.70,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:11,LLY,vcp_breakout_minervini,1D,BLOCKED,"","",963.33,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:12,V,vcp_breakout_minervini,1D,BLOCKED,"","",328.03,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:12,MA,vcp_breakout_minervini,1D,BLOCKED,"","",495.46,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:12,ANET,vcp_breakout_minervini,1D,BLOCKED,"","",172.70,"","","",Failed: Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:13,CRWD,vcp_breakout_minervini,1D,BLOCKED,"","",455.64,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:13,TSM,vcp_breakout_minervini,1D,BLOCKED,"","",397.67,"","","",Failed: Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:14,ASML,vcp_breakout_minervini,1D,BLOCKED,"","",1427.02,"","","",Failed: RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:14,SHOP,vcp_breakout_minervini,1D,BLOCKED,"","",127.67,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:15,AXP,vcp_breakout_minervini,1D,BLOCKED,"","",319.68,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:53:15,NVO,vcp_breakout_minervini,1D,BLOCKED,"","",43.88,"","","",Failed: Stage 2 — price > rising 50/150/200 SMAs; Within 25.0% of 52w high; RS proxy: 50-bar return ≥ 10.0%; Tight final base — last 10 bars range ≤ 8.0%; Pivot break — close above final-base high; Pivot volume ≥ 1.4× avg; Full VCP base structure (T1>T2>T3)
+2026-05-02,20:57:16,SPY,vwap_rsi_ema,5m,BLOCKED,"","",720.00,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:16,QQQ,vwap_rsi_ema,5m,BLOCKED,"","",673.55,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:16,IWM,vwap_rsi_ema,5m,BLOCKED,"","",278.88,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:16,DIA,vwap_rsi_ema,5m,BLOCKED,"","",494.49,"","","",Failed: Market bias
+2026-05-02,20:57:17,AAPL,vwap_rsi_ema,5m,BLOCKED,"","",280.07,"","","",Failed: Market bias
+2026-05-02,20:57:17,MSFT,vwap_rsi_ema,5m,BLOCKED,"","",413.24,"","","",Failed: Market bias
+2026-05-02,20:57:18,NVDA,vwap_rsi_ema,5m,BLOCKED,"","",198.12,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:18,AMZN,vwap_rsi_ema,5m,BLOCKED,"","",267.55,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:18,GOOGL,vwap_rsi_ema,5m,BLOCKED,"","",385.34,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:57:18,META,vwap_rsi_ema,5m,BLOCKED,"","",608.80,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:19,TSLA,vwap_rsi_ema,5m,BLOCKED,"","",391.34,"","","",Failed: Market bias
+2026-05-02,20:57:19,AMD,vwap_rsi_ema,5m,BLOCKED,"","",361.85,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:57:19,NFLX,vwap_rsi_ema,5m,BLOCKED,"","",91.95,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:19,COIN,vwap_rsi_ema,5m,BLOCKED,"","",193.50,"","","",Failed: RSI(3) below 30 (snap-back setup in uptrend)
+2026-05-02,20:57:20,AVGO,vwap_rsi_ema,5m,BLOCKED,"","",420.27,"","","",Failed: RSI(3) above 70 (reversal setup in downtrend)
+2026-05-02,20:57:47,NVDA,abcd_aziz,5m,BLOCKED,"","",198.12,"","","",Failed: Market bias
+2026-05-02,20:57:47,AMD,abcd_aziz,5m,BLOCKED,"","",361.85,"","","",Failed: Market bias
+2026-05-02,20:57:47,TSLA,abcd_aziz,5m,BLOCKED,"","",391.34,"","","",Failed: Market bias
+2026-05-02,20:57:48,COIN,abcd_aziz,5m,BLOCKED,"","",193.50,"","","",Failed: Market bias
+2026-05-02,20:57:48,AAPL,abcd_aziz,5m,BLOCKED,"","",280.07,"","","",Failed: Market bias
+2026-05-02,20:57:48,MSFT,abcd_aziz,5m,BLOCKED,"","",413.24,"","","",Failed: Market bias
+2026-05-02,20:57:48,AMZN,abcd_aziz,5m,BLOCKED,"","",267.55,"","","",Failed: Market bias
+2026-05-02,20:57:49,META,abcd_aziz,5m,BLOCKED,"","",608.80,"","","",Failed: Market bias
+2026-05-02,20:57:49,NFLX,abcd_aziz,5m,BLOCKED,"","",91.95,"","","",Failed: Market bias
+2026-05-02,20:57:49,AVGO,abcd_aziz,5m,BLOCKED,"","",420.27,"","","",Failed: Market bias
+2026-05-02,20:57:50,PLTR,abcd_aziz,5m,BLOCKED,"","",144.41,"","","",Failed: Market bias
+2026-05-02,20:57:50,SHOP,abcd_aziz,5m,BLOCKED,"","",127.64,"","","",Failed: Market bias
+2026-05-02,20:57:50,CRM,abcd_aziz,5m,BLOCKED,"","",183.80,"","","",Failed: Market bias
+2026-05-02,20:57:50,ADBE,abcd_aziz,5m,BLOCKED,"","",251.00,"","","",Failed: Market bias
+2026-05-02,20:57:51,MSTR,abcd_aziz,5m,BLOCKED,"","",176.59,"","","",Failed: Market bias
+2026-05-02,20:57:51,MARA,abcd_aziz,5m,BLOCKED,"","",11.46,"","","",Failed: Market bias
+2026-05-02,20:57:51,AFRM,abcd_aziz,5m,BLOCKED,"","",67.30,"","","",Failed: Market bias
+2026-05-02,20:57:51,SNOW,abcd_aziz,5m,BLOCKED,"","",141.02,"","","",Failed: Market bias

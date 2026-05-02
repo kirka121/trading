@@ -11,13 +11,11 @@ module TradingBot
     # persist the new one locks you out and forces regeneration in the
     # Questrade UI. We write tmp + rename so a crash can't truncate .env.
     class Authenticator
-      TOKEN_URL_PRACTICE = 'https://practicelogin.questrade.com/oauth2/token'
       TOKEN_URL_LIVE     = 'https://login.questrade.com/oauth2/token'
 
       AuthError = Class.new(StandardError)
 
-      def initialize(practice:, env_path: '.env')
-        @practice = practice
+      def initialize(env_path: '.env')
         @env_path = env_path
       end
 
@@ -42,7 +40,7 @@ module TradingBot
       private
 
       def token_url
-        @practice ? TOKEN_URL_PRACTICE : TOKEN_URL_LIVE
+        TOKEN_URL_LIVE
       end
 
       def post_token_request(refresh_token)
